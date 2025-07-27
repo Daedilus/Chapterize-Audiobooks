@@ -971,8 +971,8 @@ def main():
     # Destructure tuple
     audiobook_file, in_metadata, lang, model_name, model_type, cue_file = parse_args()
     if not str(audiobook_file).endswith(('.mp3', '.m4b')):
-    con.print("[bold red]ERROR:[/] The script only works with .mp3 or .m4b files")
-    sys.exit(9)
+        con.print("[bold red]ERROR:[/] The script only works with .mp3 or .m4b files")
+        sys.exit(9)
 
     # Extract metadata from input file
     con.rule("[cyan]Extracting metadata[/cyan]")

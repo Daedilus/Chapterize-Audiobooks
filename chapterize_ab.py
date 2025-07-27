@@ -629,6 +629,7 @@ def split_file(audiobook_path: PathLike,
     """
 
     file_stem = audiobook_path.stem
+    output_ext = audiobook_path.suffix
     # Set the log path for output. If it exists, generate new filename
     log_path = audiobook_path.parent.joinpath('ffmpeg_log.txt')
     if log_path.exists():
@@ -675,10 +676,11 @@ def split_file(audiobook_path: PathLike,
             if 'end' in times:
                 command_copy[7:7] = ['-to', times['end']]
             if 'chapter_type' in times:
-                file_path = audiobook_path.parent.joinpath(f"{file_stem} {counter} - {times['chapter_type']}.mp3")
+                #file_path = audiobook_path.parent.joinpath(f"{file_stem} {counter} - {times['chapter_type']}.mp3")
+                file_path = audiobook_path.parent.joinpath(f"{file_stem} {counter} - {times['chapter_type']}{output_ext}")
             else:
-                file_path = audiobook_path.parent.joinpath(f"{file_stem} - {counter}.mp3")
-
+                #file_path = audiobook_path.parent.joinpath(f"{file_stem} - {counter}.mp3")
+                file_path = audiobook_path.parent.joinpath(f"{file_stem} - {counter}{output_ext}")
             track_num = ['-metadata', f"track={counter}/{len(timecodes)}"]
             command_copy.extend([*stream, *track_num, '-metadata', f"title={times['chapter_type']}",
                                  f'{file_path}'])
@@ -968,9 +970,9 @@ def main():
 
     # Destructure tuple
     audiobook_file, in_metadata, lang, model_name, model_type, cue_file = parse_args()
-    if not str(audiobook_file).endswith('.mp3'):
-        con.print("[bold red]ERROR:[/] The script only works with .mp3 files (for now)")
-        sys.exit(9)
+    if not str(audiobook_file).endswith(('.mp3', '.m4b')):
+    con.print("[bold red]ERROR:[/] The script only works with .mp3 or .m4b files")
+    sys.exit(9)
 
     # Extract metadata from input file
     con.rule("[cyan]Extracting metadata[/cyan]")

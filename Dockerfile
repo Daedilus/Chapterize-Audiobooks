@@ -1,20 +1,14 @@
-# Use an official Python runtime as a parent image
 FROM python:3.10-slim
 
-# Set the working directory in the container
-WORKDIR /usr/src/app
+WORKDIR /app
 
-# Install ffmpeg
-RUN apt-get update && apt-get install -y ffmpeg
+RUN apt-get update && \
+    apt-get install -y ffmpeg && \
+    rm -rf /var/lib/apt/lists/*
 
-# Copy the requirements file into the container
-COPY requirements.txt ./
-
-# Install the dependencies specified in requirements.txt
+COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
-
-# Copy the rest of the application code into the container
+COPY defaults.toml ./defaults.toml
 COPY . .
 
-# Define the entrypoint
-ENTRYPOINT ["python", "chapterize_ab.py"]
+CMD ["python", "watcher_chapterize.py"]
